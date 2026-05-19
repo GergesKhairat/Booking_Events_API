@@ -22,6 +22,8 @@ class MediaService
     {
         if ($model->getMedia($collection)->isNotEmpty()) {
             $model->clearMediaCollection($collection);
+        } else {
+            return response()->json(["ds" => "sds"], 200);
         }
         return true;
     }

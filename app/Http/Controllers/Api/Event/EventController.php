@@ -45,6 +45,10 @@ class EventController extends Controller
                 "message" => "Event Not Found"
             ], 404);
         }
+        return response()->json([
+            "success" => true,
+            "Event" => new EventResource($event)
+        ], 200);
         return $event;
     }
     //show
@@ -68,7 +72,7 @@ class EventController extends Controller
         return response()->json([
             "success" => true,
             "Event" => new EventResource($event)
-        ], 404);
+        ], 200);
     }
     //create
     public function create(CreateEventRequest $request)
@@ -118,7 +122,13 @@ class EventController extends Controller
     //delete
     public function delete($id)
     {
-        $event = $this->returnEvent($id);
+        $event = Event::find($id);
+        if (!$event) {
+            return response()->json([
+                "success" => false,
+                "message" => "Event Not Found"
+            ], 404);
+        }
         $this->mediaService->deleteMedia($event, "main_image");
         $event->delete();
         return response()->json([
